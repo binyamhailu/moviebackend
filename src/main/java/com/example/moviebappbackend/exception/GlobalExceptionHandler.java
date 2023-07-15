@@ -51,7 +51,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UnauthorizedUserException.class)
     public ResponseEntity<Object> handleUnauthorizedUserException(UnauthorizedUserException ex) {
         String message = ex.getMessage();
-        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+        ExceptionResponse genericErrorResponse = new ExceptionResponse(message,HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(genericErrorResponse, HttpStatus.UNAUTHORIZED);
     }
 }
 
