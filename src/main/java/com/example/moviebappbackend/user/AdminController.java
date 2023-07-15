@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     @GetMapping
-//    @PreAuthorize("hasAuthority('admin:read')")
     public String get() {
-        return "admin controller authentication is working ";
+        return "admin controller test authentication is working ";
     }
 
 }
