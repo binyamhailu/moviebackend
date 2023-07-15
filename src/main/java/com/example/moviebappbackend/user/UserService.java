@@ -1,6 +1,8 @@
 package com.example.moviebappbackend.user;
 
+import com.example.moviebappbackend.user.token.TokenRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +11,11 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, TokenRepository tokenRepository) {
         this.userRepository = userRepository;
+        this.tokenRepository = tokenRepository;
     }
 
     public User createUser(User user) {
@@ -45,8 +49,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with ID: " + id + " not found"));
+
+        // Delete all associated tokens
+        tokenRepository.deleteAllByUser(user);
+
+        // Delete the user
+        userRepository.delete(user);    }
 }
 
