@@ -35,13 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
+
     final String authHeader = request.getHeader("Authorization");
     final String jwt;
     final String userEmail;
     if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().write("Authentication token is required to access this resource");
+      filterChain.doFilter(request, response);
       return;
+//      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//      response.getWriter().write("Authentication token is required to access this resource");
+//      return;
     }
     jwt = authHeader.substring(7);
     userEmail = jwtService.extractUsername(jwt);

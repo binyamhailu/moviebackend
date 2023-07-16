@@ -1,17 +1,46 @@
 package com.example.moviebappbackend.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.postgresql.util.PSQLException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.ErrorResponse;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class GlobalExceptionHandler   {
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("timestamp", new Date(System.currentTimeMillis()));
+        responseBody.put("status", HttpStatus.BAD_REQUEST.value());
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        });
+
+        responseBody.put("errors", errors);
+
+        return responseBody;
+    }
     @ExceptionHandler(ScreeningFullException.class)
     public ResponseEntity<Object> handleScreeningFullException(ScreeningFullException ex) {
         String message = ex.getMessage();
@@ -54,5 +83,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse genericErrorResponse = new ExceptionResponse(message,HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(genericErrorResponse, HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+        String message = ex.getMessage();
+        ExceptionResponse errorResponse = new ExceptionResponse(message, HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
 }
 
