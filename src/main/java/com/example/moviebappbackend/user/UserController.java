@@ -1,9 +1,13 @@
 package com.example.moviebappbackend.user;
 
+import com.example.moviebappbackend.auth.AuthenticationService;
+import com.example.moviebappbackend.auth.RegisterUserRequest;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,15 +18,24 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
-    public UserController(UserService userService) {
+    private final PasswordEncoder passwordEncoder;
+    public UserController(UserService userService, AuthenticationService authenticationService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    @PostMapping()
+    public ResponseEntity<User> createUser(@RequestBody @Valid  RegisterUserRequest user) {
+
+        var user1 = User.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .role(user.getRole())
+                .build();
+        var savedUser = userService.createUser(user1);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @GetMapping("/{id}")
