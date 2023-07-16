@@ -1,12 +1,13 @@
 package com.example.moviebappbackend.movie;
 
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/movies")
+@RequestMapping("/api/v1/movies")
 @PreAuthorize("hasRole('ADMIN')")
 public class MovieController {
     private final MovieService movieService;
@@ -26,7 +27,7 @@ public class MovieController {
     }
 
     @PostMapping
-    public Movie createMovie(@RequestBody Movie movie) {
+    public Movie createMovie(@RequestBody @Valid  Movie movie) {
         return movieService.createMovie(movie);
     }
 
