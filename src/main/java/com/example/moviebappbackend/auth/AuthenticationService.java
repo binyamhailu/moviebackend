@@ -30,7 +30,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationResponse register(RegisterRequest request) {
+  public AuthenticationResponse register(RegisterUserRequest request) {
     var user = User.builder()
         .firstname(request.getFirstname())
         .lastname(request.getLastname())
