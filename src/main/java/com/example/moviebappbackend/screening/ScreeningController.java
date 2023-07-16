@@ -1,11 +1,12 @@
 package com.example.moviebappbackend.screening;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/screenings")
+@RequestMapping("/api/v1/screenings")
 public class ScreeningController {
     private final ScreeningService screeningService;
 
@@ -21,7 +22,7 @@ public class ScreeningController {
         return screeningService.getScreeningById(id);
     }
     @PostMapping
-    public Screening createScreening(@RequestBody CreateScreeningDTO screening) {
+    public Screening createScreening(@RequestBody @Valid CreateScreeningDTO screening) {
         return screeningService.createScreening(screening);
     }
     @PutMapping("/{id}")
