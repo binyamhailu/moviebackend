@@ -1,7 +1,7 @@
 package com.example.moviebappbackend;
 
 import com.example.moviebappbackend.auth.AuthenticationService;
-import com.example.moviebappbackend.auth.RegisterRequest;
+import com.example.moviebappbackend.auth.RegisterUserRequest;
 import com.example.moviebappbackend.user.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class MovieAppBackendApplication {
     ) {
         return args -> {
             if (userRepository.count() == 0) {
-                var admin = RegisterRequest.builder()
+                var admin = RegisterUserRequest.builder()
                         .firstname("Admin")
                         .lastname("Admin")
                         .email("admin@mail.com")
@@ -38,7 +38,7 @@ public class MovieAppBackendApplication {
                         .role(ADMIN)
                         .build();
                 logger.info("Admin token: {}", service.register(admin).getAccessToken());
-                var user = RegisterRequest.builder()
+                var user = RegisterUserRequest.builder()
                         .firstname("user")
                         .lastname("user")
                         .email("user@mail.com")

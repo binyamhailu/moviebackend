@@ -1,5 +1,6 @@
 package com.example.moviebappbackend.auth;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
+  @NotBlank(message = "email  cannot be blank")
   private String email;
+  @NotBlank(message = "password  cannot be blank")
   String password;
 }

@@ -2,6 +2,7 @@ package com.example.moviebappbackend.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class AuthenticationController {
 
   @PostMapping("/signup")
   public ResponseEntity<AuthenticationResponse> register(
-      @RequestBody RegisterRequest request
+     @Valid @RequestBody RegisterUserRequest request
   ) {
     return ResponseEntity.ok(service.register(request));
   }

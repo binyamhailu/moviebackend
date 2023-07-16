@@ -1,5 +1,6 @@
 package com.example.moviebappbackend.user.token;
 
+import com.example.moviebappbackend.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,4 +17,5 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
   List<Token> findAllValidTokenByUser(Long id);
 
   Optional<Token> findByToken(String token);
+  void  deleteAllByUser(User user) ;
 }
