@@ -1,38 +1,31 @@
+version: '3'
+
 services:
-  postgres:
-    container_name: postgres-sql
-    image: postgres
+  movie_app_backend:
+    build: .
+    container_name: movie_app_backend
+    restart: always
+    ports:
+      - "8080:8080"  # Map the application port
     environment:
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/spring  # Use the service name 'database' as the host to connect to the PostgreSQL container
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: changeme
+    depends_on:
+      - database  # Make sure the database service is up and running before starting the application service
+
+  database:
+    image: postgres:latest
+    container_name: moviebapp_database
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: spring
     ports:
       - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "5050:80"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-networks:
-  postgres:
-    driver: bridge
+      - db_data:/var/lib/postgresql/data
 
 volumes:
-  postgres:
-  pgadmin:
+  db_data:
