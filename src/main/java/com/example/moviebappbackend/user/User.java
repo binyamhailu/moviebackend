@@ -1,6 +1,7 @@
 package com.example.moviebappbackend.user;
 
 import com.example.moviebappbackend.user.token.Token;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ import java.util.List;
 public class User implements UserDetails {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String firstname;
   private String lastname;
@@ -29,12 +30,14 @@ public class User implements UserDetails {
   private String email;
   @Column(unique = true)
   private String username;
+  @JsonIgnore
   private String password;
 
   @Enumerated(EnumType.STRING)
   private Role role;
 
   @OneToMany(mappedBy = "user")
+  @JsonIgnore // Add this annotation to break the bi-directional serialization
   private List<Token> tokens;
 
   @Override
