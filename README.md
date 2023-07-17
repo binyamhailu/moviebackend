@@ -83,6 +83,7 @@ application:
       password: password
 ```
 
+## CI Integration
 [![Java CI with Maven](https://github.com/mengestu/moviebackend/actions/workflows/maven.yml/badge.svg)](https://github.com/mengestu/moviebackend/actions/workflows/maven.yml)
 ## Unit Testing
 
