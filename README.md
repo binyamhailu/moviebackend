@@ -83,7 +83,7 @@ application:
       password: password
 ```
 
-
+[![Java CI with Maven](https://github.com/mengestu/moviebackend/actions/workflows/maven.yml/badge.svg)](https://github.com/mengestu/moviebackend/actions/workflows/maven.yml)
 ## Unit Testing
 
 The application's service layer is tested using JUnit and Mockito. The unit tests can be found in the `src/test` directory.
