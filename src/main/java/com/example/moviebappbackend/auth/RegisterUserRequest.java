@@ -26,7 +26,7 @@ public class RegisterUserRequest {
   @NotBlank(message = "email name cannot be blank")
   @Email(message = "email must be in a valid email format")
   private String email;
-  @Size(min = 6, max = 512, message = "password  must be between 6-512 characters")
+  @Size(min = 6, message = "password  must be between 6-512 characters")
   private String password;
 
   private Role role;
