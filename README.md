@@ -5,7 +5,7 @@ This is a Spring Boot application that provides <Description of the application>
 - Basic Crud for a Movie
 - Basic Crud for a Movie Screening
 - Basic Crud for a User
-- Basic RBAC using Spring Security
+- Basic RBAC using Spring Boot 3 and  Spring Security 6
 - Global Exception Handler
 - Unit test using Mockito and Junit
 
